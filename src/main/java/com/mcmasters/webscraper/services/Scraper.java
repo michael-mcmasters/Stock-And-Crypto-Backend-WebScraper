@@ -1,8 +1,7 @@
-package com.mcmasters.webscraper;
+package com.mcmasters.webscraper.services;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.stereotype.Service;
 
