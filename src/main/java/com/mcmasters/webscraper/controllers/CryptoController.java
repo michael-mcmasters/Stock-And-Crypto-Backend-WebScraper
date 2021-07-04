@@ -8,11 +8,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
 
-@RestController()
+@RestController
 public class CryptoController {
 
     @Autowired
     private Scraper scraper;
+
 
     @GetMapping("/bitcoin")
     public ResponseEntity<String> getBitcoinPrice() throws IOException {
