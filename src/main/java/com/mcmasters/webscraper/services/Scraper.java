@@ -11,16 +11,16 @@ import java.io.IOException;
 public class Scraper {
 
     public String getBitcoinPrice() throws IOException {
-        return scrape("bitcoin");
+        return scrape("btc");
     }
 
     public String getEthereumPrice() throws IOException {
-        return scrape("ethereum");
+        return scrape("eth");
     }
 
     private String scrape(String coin) throws IOException {
-        Document document = Jsoup.connect("https://www.coindesk.com/price/" + coin).get();
-        Elements newsHeadlines = document.select(".price-large");
+        Document document = Jsoup.connect("https://robinhood.com/crypto/" + coin).get();
+        Elements newsHeadlines = document.select("._1Nw7xfQTjIvcCkNYkwQMzL");
         return newsHeadlines.get(0).text();
     }
 }
