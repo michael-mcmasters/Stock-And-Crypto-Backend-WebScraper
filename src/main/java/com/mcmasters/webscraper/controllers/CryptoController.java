@@ -4,6 +4,7 @@ import com.mcmasters.webscraper.services.Scraper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
@@ -15,13 +16,13 @@ public class CryptoController {
     private Scraper scraper;
 
 
-    @GetMapping("/bitcoin")
-    public ResponseEntity<String> getBitcoinPrice() throws IOException {
-        return ResponseEntity.ok().body(scraper.getBitcoinPrice());
+    @GetMapping("/crypto/{coin}")
+    public ResponseEntity<String> getPrice(@PathVariable String coin) throws IOException {
+        return ResponseEntity.ok().body(scraper.scrapeCyptoPrice(coin));
     }
 
-    @GetMapping("/ethereum")
-    public ResponseEntity<String> getEthPrice() throws IOException {
-        return ResponseEntity.ok().body(scraper.getEthereumPrice());
+    @GetMapping("/stocks/{ticker}")
+    public ResponseEntity<String> getStockPrice(@PathVariable String ticker) throws IOException {
+        return ResponseEntity.ok().body(scraper.scrapeStockPrice(ticker));
     }
 }
