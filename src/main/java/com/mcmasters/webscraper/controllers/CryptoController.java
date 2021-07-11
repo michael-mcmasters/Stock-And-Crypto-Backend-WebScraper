@@ -24,7 +24,7 @@ public class CryptoController {
         return ResponseEntity.ok().body(scraper.scrapeCyptoPrice(coin));
     }
 
-    @GetMapping("/stocks/{ticker}")
+    @GetMapping("/stock/{ticker}")
     public ResponseEntity<Stock> getStockPrice(@PathVariable String ticker) throws IOException {
         return ResponseEntity.ok().body(scraper.scrapeStockPrice(ticker));
     }
