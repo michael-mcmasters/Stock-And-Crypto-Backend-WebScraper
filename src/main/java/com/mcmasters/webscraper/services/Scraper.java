@@ -8,6 +8,7 @@ import org.jsoup.select.Elements;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.stream.Collectors;
 
 @Service
 public class Scraper {
@@ -33,8 +34,8 @@ public class Scraper {
     }
 
     public static void main(String[] args) throws IOException, InterruptedException {
-        String ticker = "tsla";
-        boolean stock = true;
+        String ticker = "doge";
+        boolean stock = false;
 
         String uri = "";
         if (stock) {
@@ -44,7 +45,12 @@ public class Scraper {
         }
 
         Document document = Jsoup.connect(uri).get();
-        Elements e = document.select(".odd");
-        e.forEach(v -> System.out.println(v.text() + "\n" + "------"));
+        Elements elements = document.select(".odd");
+        for (Element e : elements) {
+            String[] arr = e.text().split(" ");
+            System.out.println(arr[0]);
+            System.out.println(arr[10]);
+            System.out.println("\b");
+        }
     }
 }
