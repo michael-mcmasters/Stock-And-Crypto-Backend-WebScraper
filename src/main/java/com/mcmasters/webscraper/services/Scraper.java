@@ -33,30 +33,18 @@ public class Scraper {
     }
 
     public static void main(String[] args) throws IOException, InterruptedException {
-        // https://www.google.com/finance/quote/BOTZ:NASDAQ?window=5D
-        // https://www.google.com/finance/quote/GME:NYSE?window=5D
+        String ticker = "tsla";
+        boolean stock = true;
 
-        // try nasdaq, then try nyse if doesn't work.
-
-        String ticker = "btc";
-        String uri = String.format("https://www.marketwatch.com/investing/cryptocurrency/%susd", ticker);
+        String uri = "";
+        if (stock) {
+            uri = "https://www.barchart.com/stocks/quotes/" + ticker + "/performance";
+        } else {
+            uri = "https://www.barchart.com/crypto/quotes/%5E" + ticker + "USD/performance";
+        }
 
         Document document = Jsoup.connect(uri).get();
-//        System.out.println(document.outerHtml());
-        Elements e = document.select("tr li");
-        e.forEach(v -> System.out.println(v.text()));
-
-
-
-
-//        System.out.println(e.outerHtml());
-
-////        Document document = Jsoup.connect(uri).get();
-//        Element priceElement = document.selectFirst(".enJeMd");
-//        String text = priceElement.text();
-//        if (text.startsWith("$")) {
-//            text = text.substring(1);
-//        }
-//        System.out.println(text);
+        Elements e = document.select(".odd");
+        e.forEach(v -> System.out.println(v.text() + "\n" + "------"));
     }
 }
