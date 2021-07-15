@@ -9,7 +9,7 @@ import java.io.IOException;
 public class WebScraperApplication {
 
 	public static void main(String[] args) throws IOException {
-		SpringApplication.run(WebScraperApplication.class, args);
+		//SpringApplication.run(WebScraperApplication.class, args);
 	}
 
 }
