@@ -19,13 +19,13 @@ public class CryptoController {
     private Scraper scraper;
 
 
-    @GetMapping("/crypto/{coin}")
-    public ResponseEntity<Stock> getPrice(@PathVariable String coin) throws IOException {
-        return ResponseEntity.ok().body(scraper.scrapeCyptoPrice(coin));
+    @GetMapping("/crypto/{coin}/{time}")
+    public ResponseEntity<Stock> getPrice(@PathVariable String coin, @PathVariable String time) throws IOException {
+        return ResponseEntity.ok().body(scraper.scrapeCyptoPrice(coin, time));
     }
 
-    @GetMapping("/stock/{ticker}")
-    public ResponseEntity<Stock> getStockPrice(@PathVariable String ticker) throws IOException {
+    @GetMapping("/stock/{ticker}/{time}")
+    public ResponseEntity<Stock> getStockPrice(@PathVariable String ticker, @PathVariable String time) throws IOException {
         return ResponseEntity.ok().body(scraper.scrapeStockPrice(ticker));
     }
 }

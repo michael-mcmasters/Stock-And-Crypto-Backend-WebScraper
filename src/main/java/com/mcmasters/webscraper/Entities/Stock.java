@@ -9,4 +9,6 @@ public class Stock {
 
     private String tickerName;
     private String price;
+    private String priceDifference;
+    private String percentageDifference;
 }
