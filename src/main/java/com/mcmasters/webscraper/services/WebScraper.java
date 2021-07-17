@@ -9,30 +9,27 @@ import org.jsoup.select.Elements;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.text.NumberFormat;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 @Service
 public class WebScraper {
 
-    public Stock scrapeStockInfo(String ticker) throws IOException {
-        String robinhoodURI = "https://robinhood.com/stocks/" + ticker;
-        String barchartURI = "https://www.barchart.com/stocks/quotes/" + ticker + "/performance";
-        return scrape(ticker, robinhoodURI, barchartURI);
+    public Stock scrapeStockInfo(String stockTicker) throws IOException {
+        String robinhoodURI = "https://robinhood.com/stocks/" + stockTicker;
+        String barchartURI = "https://www.barchart.com/stocks/quotes/" + stockTicker + "/performance";
+        return scrape(stockTicker, robinhoodURI, barchartURI);
     }
 
-    public Stock scrapeCryptoInfo(String coin) throws IOException {
-        String robinhoodURI = "https://robinhood.com/crypto/" + coin;
-        String barchartURI = "https://www.barchart.com/crypto/quotes/%5E" + coin + "USD/performance";
-        return scrape(coin, robinhoodURI, barchartURI);
+    public Stock scrapeCryptoInfo(String coinTicker) throws IOException {
+        String robinhoodURI = "https://robinhood.com/crypto/" + coinTicker;
+        String barchartURI = "https://www.barchart.com/crypto/quotes/%5E" + coinTicker + "USD/performance";
+        return scrape(coinTicker, robinhoodURI, barchartURI);
     }
 
 
 
-    // Scrapes the given websites for the current and historic prices of the given stock/crypto ticker.
+    // Scrapes the given websites for the given stock/crypto ticker and returns data as a Stock object.
     private Stock scrape(String ticker, String robinhoodURI, String barchartURI) throws IOException {
         Document robinhoodDoc = Jsoup.connect(robinhoodURI).get();
         Document barchartDoc = Jsoup.connect(barchartURI).get();
@@ -44,36 +41,37 @@ public class WebScraper {
 
     private double getCurrentPrice(Document document) {
         String priceStr = document.selectFirst("._1Nw7xfQTjIvcCkNYkwQMzL").text();
-        return formatPrice(priceStr);
+        return convertPriceToDouble(priceStr);
     }
 
-    // Get 1D price and percentage from Robinhood. Then get 5D, week, month, ytd and year from barchart.
+    // Returns list of historic prices. 1D price is scraped from Robinhood, 5D/week/month etc is scraped from barchart.
     private List<HistoricPrice> getHistoricPrices(Document robinhoodDoc, Document barchartDoc) {
         List<HistoricPrice> historicPrices = new ArrayList<>();
 
         String percentageStr = robinhoodDoc.selectFirst("._27rSsse3BjeLj7Y1bhIE_9").text();
         String[] arr = percentageStr.split(" ");
-        double price = formatPrice(arr[0]);
-        double percentage = formatPercentage(arr[1]);
+        double price = convertPriceToDouble(arr[0]);
+        double percentage = convertPercentageToDouble(arr[1]);
         historicPrices.add(new HistoricPrice(price, percentage));
 
         Elements elements = barchartDoc.select(".odd");
         for (Element e : elements) {
             arr = e.text().split(" ");
-            price = formatPrice(arr[9]);
-            percentage = formatPercentage(arr[10]);
+            price = convertPriceToDouble(arr[9]);
+            percentage = convertPercentageToDouble(arr[10]);
             historicPrices.add(new HistoricPrice(price, percentage));
         }
         return historicPrices;
     }
 
-    private double formatPrice(String price) {
+    // Regex removes + $ and ,
+    private double convertPriceToDouble(String price) {
         price = price.replaceAll("\\+|\\$|,", "");
         return Double.parseDouble(price);
     }
 
-    // Percentage comes in as (+3.82%) ... This removes the parentheses, the plus symbol, and the percentage sign.
-    private double formatPercentage(String percentage) {
+    // Percentage comes in as (+3.82%) ... Regex removes ( ) $ , and %
+    private double convertPercentageToDouble(String percentage) {
         percentage = percentage.replaceAll("\\(|$|,|%|\\)", "");
         return Double.parseDouble(percentage);
     }
