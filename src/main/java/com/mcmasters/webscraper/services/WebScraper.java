@@ -9,8 +9,11 @@ import org.jsoup.select.Elements;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.text.NumberFormat;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 @Service
 public class WebScraper {
@@ -34,17 +37,14 @@ public class WebScraper {
         Document robinhoodDoc = Jsoup.connect(robinhoodURI).get();
         Document barchartDoc = Jsoup.connect(barchartURI).get();
 
-        String price = getCurrentPrice(robinhoodDoc);
+        double price = getCurrentPrice(robinhoodDoc);
         List<HistoricPrice> historicPrices = getHistoricPrices(robinhoodDoc, barchartDoc);
         return new Stock(ticker, price, historicPrices);
     }
 
-    private String getCurrentPrice(Document document) {
+    private double getCurrentPrice(Document document) {
         String priceStr = document.selectFirst("._1Nw7xfQTjIvcCkNYkwQMzL").text();
-        if (priceStr.startsWith("$")) {
-            priceStr = priceStr.substring(1);
-        }
-        return priceStr;
+        return formatPrice(priceStr);
     }
 
     // Get 1D price and percentage from Robinhood. Then get 5D, week, month, ytd and year from barchart.
@@ -53,22 +53,40 @@ public class WebScraper {
 
         String percentageStr = robinhoodDoc.selectFirst("._27rSsse3BjeLj7Y1bhIE_9").text();
         String[] arr = percentageStr.split(" ");
-        String price = arr[0];
-        String percentage = formatPercentage(arr[1]);
+        double price = formatPrice(arr[0]);
+        double percentage = formatPercentage(arr[1]);
         historicPrices.add(new HistoricPrice(price, percentage));
 
         Elements elements = barchartDoc.select(".odd");
         for (Element e : elements) {
             arr = e.text().split(" ");
-            price = arr[9];
+            price = formatPrice(arr[9]);
             percentage = formatPercentage(arr[10]);
             historicPrices.add(new HistoricPrice(price, percentage));
         }
         return historicPrices;
     }
 
-    // Percentage comes in as (+3.82%) ... This removes the parentheses and percentage sign.
-    private String formatPercentage(String percentage) {
-        return percentage.substring(1, percentage.length() - 2);
+    private double formatPrice(String price) {
+        if (price.startsWith("+")) {
+            price = price.substring(1);
+        }
+        if (price.startsWith("$")) {
+            price = price.substring(1);
+        }
+        return Double.parseDouble(price);
+    }
+
+    // Percentage comes in as (+3.82%) ... This removes the parentheses, dollar sign, and the percentage sign.
+    private double formatPercentage(String percentage) {
+        String numWithoutSymbols = percentage.substring(2, percentage.length() - 2);
+
+        Number number = 0.0;
+        try {
+            number = NumberFormat.getInstance().parse(numWithoutSymbols);       // Removes commas
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return number.doubleValue();
     }
 }

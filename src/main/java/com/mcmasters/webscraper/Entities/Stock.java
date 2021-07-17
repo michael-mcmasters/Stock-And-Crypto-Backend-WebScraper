@@ -10,7 +10,7 @@ import java.util.List;
 public class Stock {
 
     private String tickerName;
-    private String price;
+    private double price;
 
     private HistoricPrice day;
     private HistoricPrice week;
@@ -19,7 +19,7 @@ public class Stock {
     private HistoricPrice year;
 
 
-    public Stock(String tickerName, String price, List<HistoricPrice> historicPrices) {
+    public Stock(String tickerName, double price, List<HistoricPrice> historicPrices) {
         this.tickerName = tickerName.toUpperCase();
         this.price = price;
 
