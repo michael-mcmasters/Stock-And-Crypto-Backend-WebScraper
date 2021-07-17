@@ -5,7 +5,7 @@ import lombok.Data;
 
 import java.util.List;
 
-// Is also used to hold Crypto information.
+// Class is named Stock but is also used to store Crypto information.
 
 @Data
 @AllArgsConstructor
