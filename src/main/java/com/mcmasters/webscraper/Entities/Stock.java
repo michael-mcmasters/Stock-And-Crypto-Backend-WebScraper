@@ -1,6 +1,5 @@
 package com.mcmasters.webscraper.Entities;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import java.util.List;
@@ -8,7 +7,6 @@ import java.util.List;
 // Class is named Stock but is also used to store Crypto information.
 
 @Data
-@AllArgsConstructor
 public class Stock {
 
     private String tickerName;
