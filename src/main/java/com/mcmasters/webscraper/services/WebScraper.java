@@ -74,8 +74,7 @@ public class WebScraper {
 
     // Percentage comes in as (+3.82%) ... This removes the parentheses, the plus symbol, and the percentage sign.
     private double formatPercentage(String percentage) {
-        String noParentheses = percentage.substring(1, percentage.length() - 2);
-        percentage = noParentheses.replaceAll("\\(|$|,|%|\\)", "");
+        percentage = percentage.replaceAll("\\(|$|,|%|\\)", "");
         return Double.parseDouble(percentage);
     }
 }
