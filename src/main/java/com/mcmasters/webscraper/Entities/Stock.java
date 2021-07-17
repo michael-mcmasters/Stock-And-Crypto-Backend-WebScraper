@@ -22,7 +22,7 @@ public class Stock {
 
 
     public Stock(String tickerName, String price, List<HistoricPrice> historicPrices) {
-        this.tickerName = tickerName;
+        this.tickerName = tickerName.toUpperCase();
         this.price = price;
 
         day = historicPrices.get(0);
