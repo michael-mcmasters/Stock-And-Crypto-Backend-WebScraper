@@ -25,7 +25,7 @@ public class CryptoController {
     }
 
     @GetMapping("/crypto/{coin}")
-    public ResponseEntity<Stock> getPrice(@PathVariable String coin) throws IOException {
+    public ResponseEntity<Stock> getCyrptoPrice(@PathVariable String coin) throws IOException {
         return ResponseEntity.ok().body(webScraper.scrapeCryptoInfo(coin));
     }
 }
