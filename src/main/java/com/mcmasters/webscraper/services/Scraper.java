@@ -10,6 +10,7 @@ import org.jsoup.select.Elements;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -53,17 +54,22 @@ public class Scraper {
 
         String percentageStr = robinhoodDoc.selectFirst("._27rSsse3BjeLj7Y1bhIE_9").text();
         String[] arr = percentageStr.split(" ");
-        historicPrices.add(new HistoricPrice(arr[0], arr[1]));
+        String price = arr[0];
+        String percentage = formatPercentage(arr[1]);
+        historicPrices.add(new HistoricPrice(price, percentage));
 
         Elements elements = barchartDoc.select(".odd");
         for (Element e : elements) {
             arr = e.text().split(" ");
-            System.out.println(e);
-            System.out.println(arr[0]);
-            System.out.println(arr[10]);
-            System.out.println("\b");
-            historicPrices.add(new HistoricPrice(arr[0], arr[1]));
+            price = arr[9];
+            percentage = formatPercentage(arr[10]);
+            historicPrices.add(new HistoricPrice(price, percentage));
         }
         return historicPrices;
+    }
+
+    // Percentage comes in as (+3.82%) ... This removes the parentheses and percentage sign.
+    private String formatPercentage(String percentage) {
+        return percentage.substring(1, percentage.length() - 2);
     }
 }
