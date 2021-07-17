@@ -67,43 +67,15 @@ public class WebScraper {
         return historicPrices;
     }
 
-//    private double formatPrice(String price) {
-//        if (price.startsWith("+")) {
-//            price = price.substring(1);
-//        }
-//        if (price.startsWith("$")) {
-//            price = price.substring(1);
-//        }
-//        return Double.parseDouble(price);
-//    }
-//
-//    // Percentage comes in as (+3.82%) ... This removes the parentheses, dollar sign, and the percentage sign.
-//    private double formatPercentage(String percentage) {
-//        String numWithoutSymbols = percentage.substring(2, percentage.length() - 2);
-//
-//        Number number = 0.0;
-//        try {
-//            number = NumberFormat.getInstance().parse(numWithoutSymbols);       // Removes commas
-//        } catch (ParseException e) {
-//            e.printStackTrace();
-//        }
-//        return number.doubleValue();
-//    }
-
-
-
     private double formatPrice(String price) {
-        price = price.replaceAll("\\+", "");
-        price = price.replaceAll("\\$", "");
-        price = price.replaceAll(",", "");
+        price = price.replaceAll("\\+|\\$|,", "");
         return Double.parseDouble(price);
     }
 
-    // Percentage comes in as (+3.82%) ... This removes the parentheses and the percentage sign.
+    // Percentage comes in as (+3.82%) ... This removes the parentheses, the plus symbol, and the percentage sign.
     private double formatPercentage(String percentage) {
-        String numWithoutSymbols = percentage.substring(1, percentage.length() - 2);
-
-        percentage = percentage.replaceAll("\\+|$|,|\\(|\\)|%", "");
+        String noParentheses = percentage.substring(1, percentage.length() - 2);
+        percentage = noParentheses.replaceAll("\\(|$|,|%|\\)", "");
         return Double.parseDouble(percentage);
     }
 }
