@@ -2,7 +2,6 @@ package com.mcmasters.webscraper.services;
 
 import com.mcmasters.webscraper.Entities.HistoricPrice;
 import com.mcmasters.webscraper.Entities.Stock;
-import com.mcmasters.webscraper.util.Tuple;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -10,29 +9,28 @@ import org.jsoup.select.Elements;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 @Service
-public class Scraper {
+public class WebScraper {
 
-    public Stock scrapeCyptoPrice(String coin, String time) throws IOException {
-        String robinhoodURI = "https://robinhood.com/crypto/" + coin;
-        String barchartURI = "https://www.barchart.com/crypto/quotes/%5E" + coin + "USD/performance";
-        return createNewStock(coin, robinhoodURI, barchartURI);
-    }
-
-    public Stock scrapeStockPrice(String ticker) throws IOException {
+    public Stock scrapeStockInfo(String ticker) throws IOException {
         String robinhoodURI = "https://robinhood.com/stocks/" + ticker;
         String barchartURI = "https://www.barchart.com/stocks/quotes/" + ticker + "/performance";
-        return createNewStock(ticker, robinhoodURI, barchartURI);
+        return scrape(ticker, robinhoodURI, barchartURI);
+    }
+
+    public Stock scrapeCryptoInfo(String coin) throws IOException {
+        String robinhoodURI = "https://robinhood.com/crypto/" + coin;
+        String barchartURI = "https://www.barchart.com/crypto/quotes/%5E" + coin + "USD/performance";
+        return scrape(coin, robinhoodURI, barchartURI);
     }
 
 
 
-    private Stock createNewStock(String ticker, String robinhoodURI, String barchartURI) throws IOException {
+    // Scrapes the given websites for the current and historic prices of the given stock/crypto ticker.
+    private Stock scrape(String ticker, String robinhoodURI, String barchartURI) throws IOException {
         Document robinhoodDoc = Jsoup.connect(robinhoodURI).get();
         Document barchartDoc = Jsoup.connect(barchartURI).get();
 
@@ -49,6 +47,7 @@ public class Scraper {
         return priceStr;
     }
 
+    // Get 1D price and percentage from Robinhood. Then get 5D, week, month, ytd and year from barchart.
     private List<HistoricPrice> getHistoricPrices(Document robinhoodDoc, Document barchartDoc) {
         List<HistoricPrice> historicPrices = new ArrayList<>();
 

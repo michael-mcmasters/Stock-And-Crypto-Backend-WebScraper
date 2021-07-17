@@ -1,7 +1,7 @@
 package com.mcmasters.webscraper.controllers;
 
 import com.mcmasters.webscraper.Entities.Stock;
-import com.mcmasters.webscraper.services.Scraper;
+import com.mcmasters.webscraper.services.WebScraper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -16,16 +16,16 @@ import java.io.IOException;
 public class CryptoController {
 
     @Autowired
-    private Scraper scraper;
+    private WebScraper webScraper;
 
 
-    @GetMapping("/crypto/{coin}/{time}")
-    public ResponseEntity<Stock> getPrice(@PathVariable String coin, @PathVariable String time) throws IOException {
-        return ResponseEntity.ok().body(scraper.scrapeCyptoPrice(coin, time));
+    @GetMapping("/stock/{ticker}")
+    public ResponseEntity<Stock> getStockPrice(@PathVariable String ticker) throws IOException {
+        return ResponseEntity.ok().body(webScraper.scrapeStockInfo(ticker));
     }
 
-    @GetMapping("/stock/{ticker}/{time}")
-    public ResponseEntity<Stock> getStockPrice(@PathVariable String ticker, @PathVariable String time) throws IOException {
-        return ResponseEntity.ok().body(scraper.scrapeStockPrice(ticker));
+    @GetMapping("/crypto/{coin}")
+    public ResponseEntity<Stock> getPrice(@PathVariable String coin) throws IOException {
+        return ResponseEntity.ok().body(webScraper.scrapeCryptoInfo(coin));
     }
 }
