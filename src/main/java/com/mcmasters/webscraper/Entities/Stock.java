@@ -3,7 +3,7 @@ package com.mcmasters.webscraper.Entities;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
-import java.util.Map;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -11,20 +11,22 @@ public class Stock {
 
     private String tickerName;
     private String price;
-    Map<String, String> historicPrices;
 
-//    private String dayPrice;
-//    private String dayPercentage;
-//
-//    private String weekPrice;
-//    private String weekPercentage;
-//
-//    private String monthPrice;
-//    private String monthPercentage;
-//
-//    private String YTDPrice;
-//    private String YTDPercentage;
-//
-//    private String yearPrice;
-//    private String yearPercentage;
+    private HistoricPrice day;
+    private HistoricPrice week;
+    private HistoricPrice month;
+    private HistoricPrice ytd;
+    private HistoricPrice year;
+
+
+    public Stock(String tickerName, String price, List<HistoricPrice> historicPrices) {
+        this.tickerName = tickerName;
+        this.price = price;
+
+        day = historicPrices.get(0);
+        week = historicPrices.get(1);
+        month = historicPrices.get(2);
+        ytd = historicPrices.get(3);
+        year = historicPrices.get(4);
+    }
 }
