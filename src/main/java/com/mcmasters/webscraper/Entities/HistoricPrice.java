@@ -9,7 +9,7 @@ import lombok.Data;
 @AllArgsConstructor
 public class HistoricPrice {
 
-    private double price;
+    private double priceDifference;
     private double percentage;
 
 }
