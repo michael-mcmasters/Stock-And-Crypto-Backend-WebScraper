@@ -29,14 +29,16 @@ public class CryptoController {
         return ResponseEntity.ok().body(webScraper.scrapeCryptoInfo(coin));
     }
 
+    // Some stocks or index funds such as VTSAX can not be web scraped.
+    // This returns if the given ticker is supported by this program.
     @GetMapping("/stock/{ticker}/verify")
-    public ResponseEntity<Boolean> verifyStockExists(@PathVariable String ticker) {
+    public ResponseEntity<Boolean> verifyStockCanBeFound(@PathVariable String ticker) {
         boolean result = true;
         return ResponseEntity.ok().body(result);      // TODO
     }
 
     @GetMapping("/crypto/{coin}/verify")
-    public ResponseEntity<Boolean> verifyCryptoExists(@PathVariable String coin) {
+    public ResponseEntity<Boolean> verifyCryptoCanbeFound(@PathVariable String coin) {
         boolean result = true;
         return ResponseEntity.ok().body(result);      // TODO
     }
