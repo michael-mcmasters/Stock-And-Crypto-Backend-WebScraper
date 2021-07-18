@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.io.IOException;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:3002")
+@CrossOrigin(origins = "http://localhost:3001")
 public class CryptoController {
 
     @Autowired
@@ -27,5 +27,17 @@ public class CryptoController {
     @GetMapping("/crypto/{coin}")
     public ResponseEntity<Stock> getCyrptoPrice(@PathVariable String coin) throws IOException {
         return ResponseEntity.ok().body(webScraper.scrapeCryptoInfo(coin));
+    }
+
+    @GetMapping("/stock/{ticker}/verify")
+    public ResponseEntity<Boolean> verifyStockExists(@PathVariable String ticker) {
+        boolean result = true;
+        return ResponseEntity.ok().body(result);      // TODO
+    }
+
+    @GetMapping("/crypto/{coin}/verify")
+    public ResponseEntity<Boolean> verifyCryptoExists(@PathVariable String coin) {
+        boolean result = true;
+        return ResponseEntity.ok().body(result);      // TODO
     }
 }
