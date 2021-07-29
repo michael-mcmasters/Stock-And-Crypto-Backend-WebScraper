@@ -2,6 +2,7 @@ package com.mcmasters.webscraper.controllers;
 
 import com.mcmasters.webscraper.Entities.Stock;
 import com.mcmasters.webscraper.services.WebScraper;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -12,7 +13,8 @@ import org.springframework.web.bind.annotation.RestController;
 import java.io.IOException;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:3001")
+@CrossOrigin(origins = "http://localhost:3000")
+@Slf4j
 public class CryptoController {
 
     @Autowired
@@ -21,11 +23,19 @@ public class CryptoController {
 
     @GetMapping("/stock/{ticker}")
     public ResponseEntity<Stock> getStockPrice(@PathVariable String ticker) throws IOException {
-        return ResponseEntity.ok().body(webScraper.scrapeStockInfo(ticker));
+        log.info("Scraping prices for stock, {}", ticker);
+        Stock stock = webScraper.scrapeStockInfo(ticker);
+
+        log.info("Retrieved prices for stock {}, {}", ticker, stock);
+        return ResponseEntity.ok().body(stock);
     }
 
     @GetMapping("/crypto/{coin}")
     public ResponseEntity<Stock> getCyrptoPrice(@PathVariable String coin) throws IOException {
+        log.info("Scraping prices for crypto, {}", coin);
+        Stock crypto = webScraper.scrapeCryptoInfo(coin);
+
+        log.info("Retrieved prices for stock {}, {}", coin, crypto);
         return ResponseEntity.ok().body(webScraper.scrapeCryptoInfo(coin));
     }
 

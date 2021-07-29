@@ -2,6 +2,7 @@ package com.mcmasters.webscraper.services;
 
 import com.mcmasters.webscraper.Entities.HistoricPrice;
 import com.mcmasters.webscraper.Entities.Stock;
+import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -13,18 +14,27 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@Slf4j
 public class WebScraper {
 
     public Stock scrapeStockInfo(String stockTicker) throws IOException {
-        String robinhoodURI = "https://robinhood.com/stocks/" + stockTicker;
-        String barchartURI = "https://www.barchart.com/stocks/quotes/" + stockTicker + "/performance";
-        return scrape(stockTicker, robinhoodURI, barchartURI);
+        try {
+            String robinhoodURI = "https://robinhood.com/stocks/" + stockTicker;
+            String barchartURI = "https://www.barchart.com/stocks/quotes/" + stockTicker + "/performance";
+            return scrape(stockTicker, robinhoodURI, barchartURI);
+        } catch (Exception exc) {
+            throw new IOException("Unable to fetch stock " + stockTicker);
+        }
     }
 
     public Stock scrapeCryptoInfo(String coinTicker) throws IOException {
-        String robinhoodURI = "https://robinhood.com/crypto/" + coinTicker;
-        String barchartURI = "https://www.barchart.com/crypto/quotes/%5E" + coinTicker + "USD/performance";
-        return scrape(coinTicker, robinhoodURI, barchartURI);
+        try {
+            String robinhoodURI = "https://robinhood.com/crypto/" + coinTicker;
+            String barchartURI = "https://www.barchart.com/crypto/quotes/%5E" + coinTicker + "USD/performance";
+            return scrape(coinTicker, robinhoodURI, barchartURI);
+        } catch (Exception exc) {
+            throw new IOException("Unable to fetch crypto " + coinTicker);
+        }
     }
 
 
@@ -39,8 +49,8 @@ public class WebScraper {
         return new Stock(ticker, price, historicPrices);
     }
 
-    private double getCurrentPrice(Document document) {
-        String priceStr = document.selectFirst("._1Nw7xfQTjIvcCkNYkwQMzL").text();
+    private double getCurrentPrice(Document robinhoodDoc) {
+        String priceStr = robinhoodDoc.selectFirst("._1Nw7xfQTjIvcCkNYkwQMzL").text();
         return convertPriceToDouble(priceStr);
     }
 
