@@ -21,6 +21,7 @@ public class CryptoController {
     private WebScraper webScraper;
 
 
+
     @GetMapping("/stock/{ticker}")
     public ResponseEntity<Stock> getStockPrice(@PathVariable String ticker) throws IOException {
         log.info("Scraping prices for stock, {}", ticker);

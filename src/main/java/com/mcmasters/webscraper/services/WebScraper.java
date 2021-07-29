@@ -17,6 +17,11 @@ import java.util.List;
 @Slf4j
 public class WebScraper {
 
+    private static final String robinhoodCurrentPriceQuery = "._1Nw7xfQTjIvcCkNYkwQMzL";
+    private static final String robinhoodCurrentDifferenceQuery = "._27rSsse3BjeLj7Y1bhIE_9";
+    private static final String barchartHistoricPriceAndDifferenceQuery = ".odd";
+
+
     public Stock scrapeStockInfo(String stockTicker) throws IOException {
         try {
             String robinhoodURI = "https://robinhood.com/stocks/" + stockTicker;
@@ -50,7 +55,7 @@ public class WebScraper {
     }
 
     private double getCurrentPrice(Document robinhoodDoc) {
-        String priceStr = robinhoodDoc.selectFirst("._1Nw7xfQTjIvcCkNYkwQMzL").text();
+        String priceStr = robinhoodDoc.selectFirst(robinhoodCurrentPriceQuery).text();
         return convertPriceToDouble(priceStr);
     }
 
@@ -58,13 +63,13 @@ public class WebScraper {
     private List<HistoricPrice> getHistoricPrices(Document robinhoodDoc, Document barchartDoc) {
         List<HistoricPrice> historicPrices = new ArrayList<>();
 
-        String percentageStr = robinhoodDoc.selectFirst("._27rSsse3BjeLj7Y1bhIE_9").text();
+        String percentageStr = robinhoodDoc.selectFirst(robinhoodCurrentDifferenceQuery).text();
         String[] arr = percentageStr.split(" ");
         double price = convertPriceToDouble(arr[0]);
         double percentage = convertPercentageToDouble(arr[1]);
         historicPrices.add(new HistoricPrice(price, percentage));
 
-        Elements elements = barchartDoc.select(".odd");
+        Elements elements = barchartDoc.select(barchartHistoricPriceAndDifferenceQuery);
         for (Element e : elements) {
             arr = e.text().split(" ");
             price = convertPriceToDouble(arr[9]);
