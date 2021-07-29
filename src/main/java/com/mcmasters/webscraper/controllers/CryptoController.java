@@ -36,7 +36,7 @@ public class CryptoController {
         log.info("Scraping prices for crypto, {}", coin);
         Stock crypto = webScraper.scrapeCryptoInfo(coin);
 
-        log.info("Retrieved prices for stock {}, {}", coin, crypto);
+        log.info("Retrieved prices for crypto {}, {}", coin, crypto);
         return ResponseEntity.ok().body(webScraper.scrapeCryptoInfo(coin));
     }
 
