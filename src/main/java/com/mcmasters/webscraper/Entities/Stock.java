@@ -10,6 +10,7 @@ import java.util.List;
 public class Stock {
 
     private String tickerName;
+    private String type;
     private double currentPrice;
 
     private HistoricPrice day;
@@ -19,8 +20,9 @@ public class Stock {
     private HistoricPrice year;
 
 
-    public Stock(String tickerName, double price, List<HistoricPrice> historicPrices) {
+    public Stock(String tickerName, String type, double price, List<HistoricPrice> historicPrices) {
         this.tickerName = tickerName.toUpperCase();
+        this.type = type;
         this.currentPrice = price;
 
         day = historicPrices.get(0);

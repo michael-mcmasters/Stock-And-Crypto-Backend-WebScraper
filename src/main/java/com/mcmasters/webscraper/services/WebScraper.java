@@ -26,8 +26,9 @@ public class WebScraper {
         try {
             String robinhoodURI = "https://robinhood.com/stocks/" + stockTicker;
             String barchartURI = "https://www.barchart.com/stocks/quotes/" + stockTicker + "/performance";
-            return scrape(stockTicker, robinhoodURI, barchartURI);
+            return scrape(stockTicker, "stock", robinhoodURI, barchartURI);
         } catch (Exception exc) {
+            System.out.println(exc.getMessage());
             throw new IOException("Unable to fetch stock " + stockTicker);
         }
     }
@@ -36,7 +37,7 @@ public class WebScraper {
         try {
             String robinhoodURI = "https://robinhood.com/crypto/" + coinTicker;
             String barchartURI = "https://www.barchart.com/crypto/quotes/%5E" + coinTicker + "USD/performance";
-            return scrape(coinTicker, robinhoodURI, barchartURI);
+            return scrape(coinTicker, "crypto", robinhoodURI, barchartURI);
         } catch (Exception exc) {
             throw new IOException("Unable to fetch crypto " + coinTicker);
         }
@@ -45,13 +46,13 @@ public class WebScraper {
 
 
     // Scrapes the given websites for the given stock/crypto ticker and returns data as a Stock object.
-    private Stock scrape(String ticker, String robinhoodURI, String barchartURI) throws IOException {
+    private Stock scrape(String ticker, String type, String robinhoodURI, String barchartURI) throws IOException {
         Document robinhoodDoc = Jsoup.connect(robinhoodURI).get();
         Document barchartDoc = Jsoup.connect(barchartURI).get();
 
         double price = getCurrentPrice(robinhoodDoc);
         List<HistoricPrice> historicPrices = getHistoricPrices(robinhoodDoc, barchartDoc);
-        return new Stock(ticker, price, historicPrices);
+        return new Stock(ticker, type, price, historicPrices);
     }
 
     private double getCurrentPrice(Document robinhoodDoc) {
