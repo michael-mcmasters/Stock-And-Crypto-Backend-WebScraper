@@ -78,9 +78,10 @@ public class WebScraper {
         double percentage = convertPercentageToDouble(arr[1]);
         historicPrices.add(new HistoricPrice(price, percentage));
 
-        Elements elements = barchartDoc.select(barchartHistoricPriceAndDifferenceQuery);
+        Elements elements = barchartDoc.select("barchart-table-scroll tr");
+        elements.remove(0);         // Remove first row because it is the name of each column
         for (Element e : elements) {
-            log.info("Barchart element for historic prices and percentages = {}", e);
+            log.info("Barchart element for historic prices and percentages = {}", e.text());
             arr = e.text().split(" ");
             price = convertPriceToDouble(arr[9]);
             percentage = convertPercentageToDouble(arr[10]);
