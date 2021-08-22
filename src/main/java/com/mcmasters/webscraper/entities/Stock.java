@@ -28,12 +28,12 @@ public class Stock {
         this.currentPrice = price;
 
         if (priceChanges.size() < 4)
-            log.warn("Expected historicPrices to have a size of 4 but it instead has a size of {}", priceChanges.size());
+            log.warn("Expected priceChanges list to have a size of 4 but it instead has a size of {}", priceChanges.size());
 
-        day = priceChanges.get(0);
-        week = priceChanges.get(1);
-        month = priceChanges.get(2);
-        ytd = priceChanges.get(3);
-        year = priceChanges.get(4);
+        day = (priceChanges.size() >= 1) ? priceChanges.get(0) : null;
+        week = (priceChanges.size() >= 2) ? priceChanges.get(1) : null;
+        month = (priceChanges.size() >= 3) ? priceChanges.get(2) : null;
+        ytd = (priceChanges.size() >= 4) ? priceChanges.get(3) : null;
+        year = (priceChanges.size() >= 5) ? priceChanges.get(4) : null;
     }
 }
