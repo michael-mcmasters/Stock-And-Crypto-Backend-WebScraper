@@ -2,12 +2,16 @@ package com.mcmasters.webscraper.services;
 
 
 import com.mcmasters.webscraper.exceptions.UnableToScrapeTickerException;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
 import java.util.Set;
+
+
+// If a ticker can not be webscraped, then this API does not support it.
 
 @Slf4j
 @Service
@@ -17,13 +21,13 @@ public class TickerSupportedChecker {
     private WebScraper webScraper;
 
     // Cache results for a faster response if the same ticker is sent again
-    Set<String> unsupportedStocks = new HashSet<>();
-    Set<String> unsupportedCryptos = new HashSet<>();
+    @Getter Set<String> unsupportedStocks = new HashSet<>();
+    @Getter Set<String> unsupportedCryptos = new HashSet<>();
 
-    Set<String> supportedStocks = new HashSet<>();
-    Set<String> supportedCryptos = new HashSet<>();
+    @Getter Set<String> supportedStocks = new HashSet<>();
+    @Getter Set<String> supportedCryptos = new HashSet<>();
 
-    // If stock can not be webscraped, then this API does not support it.
+
     public boolean checkIfStockIsScrapable(String tickerName) {
         log.info("Checking if stock {} is supported by this API", tickerName);
         try {
@@ -52,7 +56,6 @@ public class TickerSupportedChecker {
         return true;
     }
 }
-
 
 
 

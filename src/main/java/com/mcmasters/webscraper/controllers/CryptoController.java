@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Set;
+
 @Slf4j
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
@@ -53,5 +55,15 @@ public class CryptoController {
     public ResponseEntity<Boolean> verifyCrypIsSupported(@PathVariable String tickerName) {
         boolean result = tickerSupportedChecker.checkIfCryptoIsScrapable(tickerName);
         return ResponseEntity.ok().body(result);
+    }
+
+    public ResponseEntity<Set<String>> getAllUnsupportedStocks() {
+        Set<String> unsupportedStocks = tickerSupportedChecker.getUnsupportedStocks();
+        return ResponseEntity.ok().body(unsupportedStocks);
+    }
+
+    public ResponseEntity<Set<String>> getAllUnsupportedCryptos() {
+        Set<String> unsupportedCryptos = tickerSupportedChecker.getUnsupportedCryptos();
+        return ResponseEntity.ok().body(unsupportedCryptos);
     }
 }
