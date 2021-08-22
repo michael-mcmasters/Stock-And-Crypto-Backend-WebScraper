@@ -29,6 +29,9 @@ public class TickerSupportedChecker {
 
 
     public boolean checkIfStockIsScrapable(String tickerName) {
+        if (unsupportedStocks.contains(tickerName)) return false;
+        else if (supportedStocks.contains(tickerName)) return true;
+
         log.info("Checking if stock {} is supported by this API", tickerName);
         try {
             webScraper.scrapeStockInfo(tickerName);
@@ -43,9 +46,12 @@ public class TickerSupportedChecker {
     }
 
     public boolean checkIfCryptoIsScrapable(String tickerName) {
+        if (unsupportedCryptos.contains(tickerName)) return false;
+        else if (supportedCryptos.contains(tickerName)) return true;
+
         log.info("Checking if crypto {} is supported by this API", tickerName);
         try {
-            webScraper.scrapeStockInfo(tickerName);
+            webScraper.scrapeCryptoInfo(tickerName);
         } catch (UnableToScrapeTickerException e) {
             log.info("Crypto {} is not supported by this API", tickerName);
             unsupportedCryptos.add(tickerName);

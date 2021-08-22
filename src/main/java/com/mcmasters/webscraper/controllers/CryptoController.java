@@ -51,7 +51,7 @@ public class CryptoController {
         return ResponseEntity.ok().body(result);
     }
 
-    @GetMapping("/crypto/{coin}/verify")
+    @GetMapping("/crypto/{ticker}/verify")
     public ResponseEntity<Boolean> verifyCrypIsSupported(@PathVariable String ticker) {
         boolean result = tickerSupportedChecker.checkIfCryptoIsScrapable(ticker);
         return ResponseEntity.ok().body(result);
