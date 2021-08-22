@@ -17,7 +17,7 @@ import java.util.Set;
 @Slf4j
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
-public class CryptoController {
+public class StockController {
 
     @Autowired
     private WebScraper webScraper;
@@ -26,24 +26,25 @@ public class CryptoController {
     private TickerSupportedChecker tickerSupportedChecker;
 
 
-    @GetMapping("/crypto/{ticker}")
-    public ResponseEntity<Ticker> getCyrptoPrice(@PathVariable String ticker) throws UnableToScrapeTickerException {
-        log.info("Scraping prices for crypto, {}", ticker);
+    @GetMapping("/stock/{ticker}")
+    public ResponseEntity<Ticker> getStockPrice(@PathVariable String ticker) throws UnableToScrapeTickerException {
+        log.info("Scraping prices for stock, {}", ticker);
 
-        Ticker cryptoTicker = webScraper.scrapeCryptoInfo(ticker);
-        log.info("Retrieved prices for crypto {}, {}", ticker, cryptoTicker);
-        return ResponseEntity.ok().body(cryptoTicker);
+        Ticker stockTicker = webScraper.scrapeStockInfo(ticker);
+        log.info("Retrieved prices for stock {}, {}", ticker, stockTicker);
+        return ResponseEntity.ok().body(stockTicker);
     }
 
     // If a stock/crypto/index fund can not be web scraped (such as VTSAX) then this API does not support it.
-    @GetMapping("/crypto/{ticker}/verify")
-    public ResponseEntity<Boolean> verifyCrypIsSupported(@PathVariable String ticker) {
-        boolean result = tickerSupportedChecker.checkIfCryptoIsScrapable(ticker);
+    @GetMapping("/stock/{ticker}/verify")
+    public ResponseEntity<Boolean> verifyStockIsSupported(@PathVariable String ticker) {
+        boolean result = tickerSupportedChecker.checkIfStockIsScrapable(ticker);
         return ResponseEntity.ok().body(result);
     }
 
-    public ResponseEntity<Set<String>> getAllUnsupportedCryptos() {
-        Set<String> unsupportedCryptos = tickerSupportedChecker.getUnsupportedCryptos();
-        return ResponseEntity.ok().body(unsupportedCryptos);
+    public ResponseEntity<Set<String>> getAllUnsupportedStocks() {
+        Set<String> unsupportedStocks = tickerSupportedChecker.getUnsupportedStocks();
+        return ResponseEntity.ok().body(unsupportedStocks);
     }
 }
+
