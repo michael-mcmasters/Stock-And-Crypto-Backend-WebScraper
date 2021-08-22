@@ -25,10 +25,6 @@ public class WebScraper {
     @Autowired
     private BarchartScraperService barchartScraperService;
 
-
-    private static final String barchartHistoricPriceAndDifferenceQuery = ".odd";
-
-
     public Stock scrapeStockInfo(String stockTicker) throws IOException {
         try {
             String robinhoodURI = "https://robinhood.com/stocks/" + stockTicker;
@@ -68,25 +64,26 @@ public class WebScraper {
     }
 
     private double getCurrentPrice(Document robinhoodDoc) {
-        return robinhoodScraperService.getCurrentPrice(robinhoodDoc);
+        return robinhoodScraperService.scrapeCurrentPrice(robinhoodDoc);
     }
 
     // Returns list of historic prices. 1D price is scraped from Robinhood, 5D/week/month etc is scraped from barchart.
     private List<HistoricPrice> getHistoricPrices(Document robinhoodDoc, Document barchartDoc) {
         List<HistoricPrice> historicPrices = new ArrayList<>();
 
-        HistoricPrice historicPrice = robinhoodScraperService.getCurrentPriceAndPercentageDifference(robinhoodDoc);
-        historicPrices.add(historicPrice);
+        // ToDo: Maybe change HistoricPrice name to PriceDifference?
+        HistoricPrice todaysPriceDifference = robinhoodScraperService.scrapeTodaysHistoricPrice(robinhoodDoc);
+        historicPrices.add(todaysPriceDifference);
 
-        Elements elements = barchartDoc.select("barchart-table-scroll tr");
-        elements.remove(0);         // Remove first row because it is the name of each column
-        for (Element e : elements) {
-            log.info("Barchart element for historic prices and percentages = {}", e.text());
-            String[] arr = e.text().split(" ");
-            double price = StringConverter.convertPriceToDouble(arr[9]);
-            double percentage = StringConverter.convertPercentageToDouble(arr[10]);
-            historicPrices.add(new HistoricPrice(price, percentage));
-        }
+        List<HistoricPrice> allHistoricPrices = barchartScraperService.scrapeHistoricPrices(barchartDoc);
+        historicPrices.addAll(allHistoricPrices);
         return historicPrices;
     }
 }
+
+
+
+
+
+
+

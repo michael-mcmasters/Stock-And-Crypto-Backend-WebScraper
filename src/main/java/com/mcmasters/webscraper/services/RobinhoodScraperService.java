@@ -11,16 +11,16 @@ import org.springframework.stereotype.Service;
 @Service
 public class RobinhoodScraperService {
 
-    private static final String robinhoodCurrentPriceQuery = "._1Nw7xfQTjIvcCkNYkwQMzL";
-    private static final String robinhoodCurrentDifferenceQuery = "._27rSsse3BjeLj7Y1bhIE_9";
+    private static final String currentPriceQuery = "._1Nw7xfQTjIvcCkNYkwQMzL";
+    private static final String currentDifferenceQuery = "._27rSsse3BjeLj7Y1bhIE_9";
 
-    public double getCurrentPrice(Document robinhoodDoc) {
-        String priceStr = robinhoodDoc.selectFirst(robinhoodCurrentPriceQuery).text();
+    public double scrapeCurrentPrice(Document robinhoodDoc) {
+        String priceStr = robinhoodDoc.selectFirst(currentPriceQuery).text();
         return StringConverter.convertPriceToDouble(priceStr);
     }
 
-    public HistoricPrice getCurrentPriceAndPercentageDifference(Document robinhoodDoc) {
-        Element element = robinhoodDoc.selectFirst(robinhoodCurrentDifferenceQuery);
+    public HistoricPrice scrapeTodaysHistoricPrice(Document robinhoodDoc) {
+        Element element = robinhoodDoc.selectFirst(currentDifferenceQuery);
         log.info("Robinhood element for 1 day percentage = {}", element);
 
         String percentageStr = element.text();
