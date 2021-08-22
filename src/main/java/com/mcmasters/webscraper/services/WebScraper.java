@@ -2,11 +2,13 @@ package com.mcmasters.webscraper.services;
 
 import com.mcmasters.webscraper.entities.HistoricPrice;
 import com.mcmasters.webscraper.entities.Stock;
+import com.mcmasters.webscraper.utils.StringConverter;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -17,8 +19,13 @@ import java.util.List;
 @Service
 public class WebScraper {
 
-    private static final String robinhoodCurrentPriceQuery = "._1Nw7xfQTjIvcCkNYkwQMzL";
-    private static final String robinhoodCurrentDifferenceQuery = "._27rSsse3BjeLj7Y1bhIE_9";
+    @Autowired
+    private RobinhoodScraperService robinhoodScraperService;
+
+    @Autowired
+    private BarchartScraperService barchartScraperService;
+
+
     private static final String barchartHistoricPriceAndDifferenceQuery = ".odd";
 
 
@@ -61,44 +68,25 @@ public class WebScraper {
     }
 
     private double getCurrentPrice(Document robinhoodDoc) {
-        String priceStr = robinhoodDoc.selectFirst(robinhoodCurrentPriceQuery).text();
-        return convertPriceToDouble(priceStr);
+        return robinhoodScraperService.getCurrentPrice(robinhoodDoc);
     }
 
     // Returns list of historic prices. 1D price is scraped from Robinhood, 5D/week/month etc is scraped from barchart.
     private List<HistoricPrice> getHistoricPrices(Document robinhoodDoc, Document barchartDoc) {
         List<HistoricPrice> historicPrices = new ArrayList<>();
 
-        Element element = robinhoodDoc.selectFirst(robinhoodCurrentDifferenceQuery);
-        log.info("Robinhood element for 1 day percentage = {}", element);
-
-        String percentageStr = element.text();
-        String[] arr = percentageStr.split(" ");
-        double price = convertPriceToDouble(arr[0]);
-        double percentage = convertPercentageToDouble(arr[1]);
-        historicPrices.add(new HistoricPrice(price, percentage));
+        HistoricPrice historicPrice = robinhoodScraperService.getCurrentPriceAndPercentageDifference(robinhoodDoc);
+        historicPrices.add(historicPrice);
 
         Elements elements = barchartDoc.select("barchart-table-scroll tr");
         elements.remove(0);         // Remove first row because it is the name of each column
         for (Element e : elements) {
             log.info("Barchart element for historic prices and percentages = {}", e.text());
-            arr = e.text().split(" ");
-            price = convertPriceToDouble(arr[9]);
-            percentage = convertPercentageToDouble(arr[10]);
+            String[] arr = e.text().split(" ");
+            double price = StringConverter.convertPriceToDouble(arr[9]);
+            double percentage = StringConverter.convertPercentageToDouble(arr[10]);
             historicPrices.add(new HistoricPrice(price, percentage));
         }
         return historicPrices;
-    }
-
-    // Regex removes + $ and ,
-    private double convertPriceToDouble(String price) {
-        price = price.replaceAll("\\+|\\$|,", "");
-        return Double.parseDouble(price);
-    }
-
-    // Percentage comes in as (+3.82%) ... Regex removes ( ) $ , and %
-    private double convertPercentageToDouble(String percentage) {
-        percentage = percentage.replaceAll("\\(|$|,|%|\\)", "");
-        return Double.parseDouble(percentage);
     }
 }
