@@ -44,7 +44,7 @@ public class WebScraperService {
         }
     }
 
-    // Scrapes the given websites for the given stock/crypto ticker and returns data as a Stock object.
+    // Scrapes the given websites for the given stock/crypto ticker and returns data as a Ticker object.
     private Ticker scrape(String tickerStr, String type, String robinhoodURI, String barchartURI) throws IOException {
         log.info("Scraping for robinhoodURI = {} and barchartURI = {}", robinhoodURI, barchartURI);
         Document robinhoodDoc = Jsoup.connect(robinhoodURI).get();
