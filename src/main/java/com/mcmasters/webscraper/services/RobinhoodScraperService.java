@@ -1,6 +1,6 @@
 package com.mcmasters.webscraper.services;
 
-import com.mcmasters.webscraper.entities.HistoricPrice;
+import com.mcmasters.webscraper.entities.PriceChange;
 import com.mcmasters.webscraper.utils.StringConverter;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.nodes.Document;
@@ -19,7 +19,7 @@ public class RobinhoodScraperService {
         return StringConverter.convertPriceToDouble(priceStr);
     }
 
-    public HistoricPrice scrapeTodaysHistoricPrice(Document robinhoodDoc) {
+    public PriceChange scrapeTodaysPriceChange(Document robinhoodDoc) {
         Element element = robinhoodDoc.selectFirst(currentDifferenceQuery);
         log.info("Robinhood element for 1 day percentage = {}", element);
 
@@ -27,6 +27,6 @@ public class RobinhoodScraperService {
         String[] arr = percentageStr.split(" ");
         double price = StringConverter.convertPriceToDouble(arr[0]);
         double percentage = StringConverter.convertPercentageToDouble(arr[1]);
-        return new HistoricPrice(price, percentage);
+        return new PriceChange(price, percentage);
     }
 }

@@ -1,6 +1,6 @@
 package com.mcmasters.webscraper.services;
 
-import com.mcmasters.webscraper.entities.HistoricPrice;
+import com.mcmasters.webscraper.entities.PriceChange;
 import com.mcmasters.webscraper.entities.Stock;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
@@ -50,16 +50,15 @@ public class WebScraper {
         Document robinhoodDoc = Jsoup.connect(robinhoodURI).get();
         Document barchartDoc = Jsoup.connect(barchartURI).get();
 
-        double price = robinhoodScraperService.scrapeCurrentPrice(robinhoodDoc);
-        log.info("Price = {}", price);
+        double currentPrice = robinhoodScraperService.scrapeCurrentPrice(robinhoodDoc);
+        log.info("currentPrice = {}", currentPrice);
 
-        // ToDo: Maybe change HistoricPrice name to PriceDifference or PriceChange?
-        List<HistoricPrice> historicPrices = new ArrayList<>();
-        historicPrices.add(robinhoodScraperService.scrapeTodaysHistoricPrice(robinhoodDoc));
-        historicPrices.addAll(barchartScraperService.scrapeHistoricPrices(barchartDoc));
-        log.info("historicPrices = {}", historicPrices);
+        List<PriceChange> priceChanges = new ArrayList<>();
+        priceChanges.add(robinhoodScraperService.scrapeTodaysPriceChange(robinhoodDoc));
+        priceChanges.addAll(barchartScraperService.scrapeHistoricPriceChanges(barchartDoc));
+        log.info("priceChanges = {}", priceChanges);
 
-        return new Stock(ticker, type, price, historicPrices);
+        return new Stock(ticker, type, currentPrice, priceChanges);
     }
 }
 
