@@ -47,11 +47,16 @@ public class WebScraper {
 
     // Scrapes the given websites for the given stock/crypto ticker and returns data as a Stock object.
     private Stock scrape(String ticker, String type, String robinhoodURI, String barchartURI) throws IOException {
+        log.info("Scraping for robinhoodURI = {} and barchartURI = {}", robinhoodURI, barchartURI);
         Document robinhoodDoc = Jsoup.connect(robinhoodURI).get();
         Document barchartDoc = Jsoup.connect(barchartURI).get();
 
         double price = getCurrentPrice(robinhoodDoc);
+        log.info("Price = {}", price);
+
         List<HistoricPrice> historicPrices = getHistoricPrices(robinhoodDoc, barchartDoc);
+        log.info("historicPrices = {}", historicPrices);
+
         return new Stock(ticker, type, price, historicPrices);
     }
 

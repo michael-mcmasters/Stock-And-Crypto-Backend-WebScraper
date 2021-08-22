@@ -25,8 +25,8 @@ public class CryptoController {
     @GetMapping("/stock/{ticker}")
     public ResponseEntity<Stock> getStockPrice(@PathVariable String ticker) throws IOException {
         log.info("Scraping prices for stock, {}", ticker);
-        Stock stock = webScraper.scrapeStockInfo(ticker);
 
+        Stock stock = webScraper.scrapeStockInfo(ticker);
         log.info("Retrieved prices for stock {}, {}", ticker, stock);
         return ResponseEntity.ok().body(stock);
     }
@@ -34,8 +34,8 @@ public class CryptoController {
     @GetMapping("/crypto/{coin}")
     public ResponseEntity<Stock> getCyrptoPrice(@PathVariable String coin) throws IOException {
         log.info("Scraping prices for crypto, {}", coin);
-        Stock crypto = webScraper.scrapeCryptoInfo(coin);
 
+        Stock crypto = webScraper.scrapeCryptoInfo(coin);
         log.info("Retrieved prices for crypto {}, {}", coin, crypto);
         return ResponseEntity.ok().body(webScraper.scrapeCryptoInfo(coin));
     }
