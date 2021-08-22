@@ -3,7 +3,9 @@ package com.mcmasters.webscraper.entities;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 // A Ticker can be a Stock or Crypto.
 
@@ -15,25 +17,26 @@ public class Ticker {
     private String type;
     private double currentPrice;
 
-    private PriceChange day;
-    private PriceChange week;
-    private PriceChange month;
-    private PriceChange ytd;
-    private PriceChange year;
+    Map<String, PriceChange> priceChanges = new LinkedHashMap<>();      // day, week, month, ytd, year
 
 
-    public Ticker(String tickerName, String type, double price, List<PriceChange> priceChanges) {
+    public Ticker(String tickerName, String type, double price, List<PriceChange> priceChangesList) {
         this.tickerName = tickerName.toUpperCase();
         this.type = type;
         this.currentPrice = price;
 
-        if (priceChanges.size() < 4)
-            log.warn("Expected priceChanges list to have a size of 4 but it instead has a size of {}", priceChanges.size());
+        if (priceChangesList.size() < 4)
+            log.warn("Expected priceChanges list to have a size of 4 but it instead has a size of {}", priceChangesList.size());
 
-        day = (priceChanges.size() >= 1) ? priceChanges.get(0) : null;
-        week = (priceChanges.size() >= 2) ? priceChanges.get(1) : null;
-        month = (priceChanges.size() >= 3) ? priceChanges.get(2) : null;
-        ytd = (priceChanges.size() >= 4) ? priceChanges.get(3) : null;
-        year = (priceChanges.size() >= 5) ? priceChanges.get(4) : null;
+        if (priceChangesList.size() > 0)
+            priceChanges.put("day", priceChangesList.get(0));
+        if (priceChangesList.size() > 1)
+            priceChanges.put("week", priceChangesList.get(1));
+        if (priceChangesList.size() > 2)
+            priceChanges.put("month", priceChangesList.get(2));
+        if (priceChangesList.size() > 3)
+            priceChanges.put("ytd", priceChangesList.get(3));
+        if (priceChangesList.size() > 4)
+            priceChanges.put("year", priceChangesList.get(4));
     }
 }
