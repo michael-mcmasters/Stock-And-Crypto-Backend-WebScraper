@@ -13,8 +13,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-@Service
 @Slf4j
+@Service
 public class WebScraper {
 
     private static final String robinhoodCurrentPriceQuery = "._1Nw7xfQTjIvcCkNYkwQMzL";

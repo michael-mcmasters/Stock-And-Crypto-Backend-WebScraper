@@ -1,11 +1,13 @@
 package com.mcmasters.webscraper.entities;
 
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
 
 // Class is named Stock but is also used to store Crypto information.
 
+@Slf4j
 @Data
 public class Stock {
 
@@ -24,6 +26,9 @@ public class Stock {
         this.tickerName = tickerName.toUpperCase();
         this.type = type;
         this.currentPrice = price;
+
+        if (historicPrices.size() < 4)
+            log.warn("Expected historicPrices to have a size of 4 but it only has a size of {}", historicPrices.size());
 
         day = historicPrices.get(0);
         week = historicPrices.get(1);
