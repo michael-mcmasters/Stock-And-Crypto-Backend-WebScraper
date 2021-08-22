@@ -27,33 +27,33 @@ public class CryptoController {
 
 
     @GetMapping("/stock/{ticker}")
-    public ResponseEntity<Ticker> getStockPrice(@PathVariable String tickerName) throws UnableToScrapeTickerException {
-        log.info("Scraping prices for stock, {}", tickerName);
+    public ResponseEntity<Ticker> getStockPrice(@PathVariable String ticker) throws UnableToScrapeTickerException {
+        log.info("Scraping prices for stock, {}", ticker);
 
-        Ticker stock = webScraper.scrapeStockInfo(tickerName);
-        log.info("Retrieved prices for stock {}, {}", tickerName, stock);
-        return ResponseEntity.ok().body(stock);
+        Ticker stockTicker = webScraper.scrapeStockInfo(ticker);
+        log.info("Retrieved prices for stock {}, {}", ticker, stockTicker);
+        return ResponseEntity.ok().body(stockTicker);
     }
 
-    @GetMapping("/crypto/{coin}")
-    public ResponseEntity<Ticker> getCyrptoPrice(@PathVariable String tickerName) throws UnableToScrapeTickerException {
-        log.info("Scraping prices for crypto, {}", tickerName);
+    @GetMapping("/crypto/{ticker}")
+    public ResponseEntity<Ticker> getCyrptoPrice(@PathVariable String ticker) throws UnableToScrapeTickerException {
+        log.info("Scraping prices for crypto, {}", ticker);
 
-        Ticker crypto = webScraper.scrapeCryptoInfo(tickerName);
-        log.info("Retrieved prices for crypto {}, {}", tickerName, crypto);
-        return ResponseEntity.ok().body(crypto);
+        Ticker cryptoTicker = webScraper.scrapeCryptoInfo(ticker);
+        log.info("Retrieved prices for crypto {}, {}", ticker, cryptoTicker);
+        return ResponseEntity.ok().body(cryptoTicker);
     }
 
     // If a stock/crypto/index fund can not be web scraped (such as VTSAX) then this API does not support it.
     @GetMapping("/stock/{ticker}/verify")
-    public ResponseEntity<Boolean> verifyStockIsSupported(@PathVariable String tickerName) {
-        boolean result = tickerSupportedChecker.checkIfStockIsScrapable(tickerName);
+    public ResponseEntity<Boolean> verifyStockIsSupported(@PathVariable String ticker) {
+        boolean result = tickerSupportedChecker.checkIfStockIsScrapable(ticker);
         return ResponseEntity.ok().body(result);
     }
 
     @GetMapping("/crypto/{coin}/verify")
-    public ResponseEntity<Boolean> verifyCrypIsSupported(@PathVariable String tickerName) {
-        boolean result = tickerSupportedChecker.checkIfCryptoIsScrapable(tickerName);
+    public ResponseEntity<Boolean> verifyCrypIsSupported(@PathVariable String ticker) {
+        boolean result = tickerSupportedChecker.checkIfCryptoIsScrapable(ticker);
         return ResponseEntity.ok().body(result);
     }
 
