@@ -5,11 +5,11 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
 
-// Class is named Stock but is also used to store Crypto information.
+// A Ticker can be a Stock or Crypto.
 
 @Slf4j
 @Data
-public class Stock {
+public class Ticker {
 
     private String tickerName;
     private String type;
@@ -22,7 +22,7 @@ public class Stock {
     private PriceChange year;
 
 
-    public Stock(String tickerName, String type, double price, List<PriceChange> priceChanges) {
+    public Ticker(String tickerName, String type, double price, List<PriceChange> priceChanges) {
         this.tickerName = tickerName.toUpperCase();
         this.type = type;
         this.currentPrice = price;

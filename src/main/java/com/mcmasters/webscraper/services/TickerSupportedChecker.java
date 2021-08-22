@@ -1,7 +1,7 @@
 package com.mcmasters.webscraper.services;
 
 
-import com.mcmasters.webscraper.exceptions.UnableToScrapeStockException;
+import com.mcmasters.webscraper.exceptions.UnableToScrapeTickerException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,31 +24,31 @@ public class TickerSupportedChecker {
     Set<String> supportedCryptos = new HashSet<>();
 
     // If stock can not be webscraped, then this API does not support it.
-    public boolean checkIfStockIsScrapable(String ticker) {
-        log.info("Checking if stock {} is supported by this API", ticker);
+    public boolean checkIfStockIsScrapable(String tickerName) {
+        log.info("Checking if stock {} is supported by this API", tickerName);
         try {
-            webScraper.scrapeStockInfo(ticker);
-        } catch (UnableToScrapeStockException e) {
-            log.info("Stock {} is not supported by this API", ticker);
-            unsupportedStocks.add(ticker);
+            webScraper.scrapeStockInfo(tickerName);
+        } catch (UnableToScrapeTickerException e) {
+            log.info("Stock {} is not supported by this API", tickerName);
+            unsupportedStocks.add(tickerName);
             return false;
         }
-        log.info("Stock {} is supported by this API", ticker);
-        supportedStocks.add(ticker);
+        log.info("Stock {} is supported by this API", tickerName);
+        supportedStocks.add(tickerName);
         return true;
     }
 
-    public boolean checkIfCryptoIsScrapable(String ticker) {
-        log.info("Checking if crypto {} is supported by this API", ticker);
+    public boolean checkIfCryptoIsScrapable(String tickerName) {
+        log.info("Checking if crypto {} is supported by this API", tickerName);
         try {
-            webScraper.scrapeStockInfo(ticker);
-        } catch (UnableToScrapeStockException e) {
-            log.info("Crypto {} is not supported by this API", ticker);
-            unsupportedCryptos.add(ticker);
+            webScraper.scrapeStockInfo(tickerName);
+        } catch (UnableToScrapeTickerException e) {
+            log.info("Crypto {} is not supported by this API", tickerName);
+            unsupportedCryptos.add(tickerName);
             return false;
         }
-        log.info("Crypto {} is supported by this API", ticker);
-        supportedCryptos.add(ticker);
+        log.info("Crypto {} is supported by this API", tickerName);
+        supportedCryptos.add(tickerName);
         return true;
     }
 }
