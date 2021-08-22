@@ -22,6 +22,7 @@ public class WebScraper {
     @Autowired
     private BarchartScraperService barchartScraperService;
 
+
     public Stock scrapeStockInfo(String stockTicker) throws IOException {
         try {
             String robinhoodURI = "https://robinhood.com/stocks/" + stockTicker;
@@ -50,24 +51,15 @@ public class WebScraper {
         Document barchartDoc = Jsoup.connect(barchartURI).get();
 
         double price = robinhoodScraperService.scrapeCurrentPrice(robinhoodDoc);
-        List<HistoricPrice> historicPrices = scrapeHistoricPrices(robinhoodDoc, barchartDoc);
         log.info("Price = {}", price);
+
+        // ToDo: Maybe change HistoricPrice name to PriceDifference or PriceChange?
+        List<HistoricPrice> historicPrices = new ArrayList<>();
+        historicPrices.add(robinhoodScraperService.scrapeTodaysHistoricPrice(robinhoodDoc));
+        historicPrices.addAll(barchartScraperService.scrapeHistoricPrices(barchartDoc));
         log.info("historicPrices = {}", historicPrices);
 
         return new Stock(ticker, type, price, historicPrices);
-    }
-
-    // Returns list of historic prices. 1D price is scraped from Robinhood, 5D/week/month etc is scraped from barchart.
-    private List<HistoricPrice> scrapeHistoricPrices(Document robinhoodDoc, Document barchartDoc) {
-        List<HistoricPrice> historicPrices = new ArrayList<>();
-
-        // ToDo: Maybe change HistoricPrice name to PriceDifference?
-        HistoricPrice todaysPriceDifference = robinhoodScraperService.scrapeTodaysHistoricPrice(robinhoodDoc);
-        historicPrices.add(todaysPriceDifference);
-
-        List<HistoricPrice> allHistoricPrices = barchartScraperService.scrapeHistoricPrices(barchartDoc);
-        historicPrices.addAll(allHistoricPrices);
-        return historicPrices;
     }
 }
 
