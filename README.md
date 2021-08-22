@@ -8,9 +8,13 @@ Clone this repo, open the project in your IDE of choice, and in the WebScraperAp
 <br>
 The project will run on port 8080.
 <br>
-Then try out the following endpoints.
+Then copy/paste the following endpoints into your browser or in Postman.
 
 ## Endpoints
+
+(Replace the following stock/crypto tickers with a ticker of your choice. AAPL, AMZN, DOGE, TSLA etc.)
+<br>
+<br>
 Get stock's price and history
 <br>
 http://localhost:8080/stock/twtr
@@ -73,16 +77,18 @@ http://localhost:8080/crypto/btc
 }
 ```
 
-Verify that the API supports a stock
+Verify that the API supports a stock.
 <br>
-http://localhost:8080/stock/twtr/verify
+(A stock will not be supported if it is not able to webscrape its information. This will happen for less popular cryptocurrencies or for Vanguard index funds such as VTSAX)
+<br>
+http://localhost:8080/stock/vtsax/verify
 ```json
-true
+false
 ```
 
 Verify that the API supports a cryptocurrency
 <br>
-http://localhost:8080/crypto/ada/verify
+http://localhost:8080/crypto/eth/verify
 ```json
-false
+true
 ```
