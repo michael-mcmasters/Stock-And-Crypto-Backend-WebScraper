@@ -23,25 +23,27 @@ http://localhost:8080/stock/twtr
     "tickerName": "TWTR",
     "type": "stock",
     "currentPrice": 62.52,
-    "day": {
-        "priceDifference": 0.47,
-        "percentage": 0.76
-    },
-    "week": {
-        "priceDifference": -2.3,
-        "percentage": -3.55
-    },
-    "month": {
-        "priceDifference": -5.42,
-        "percentage": -7.98
-    },
-    "ytd": {
-        "priceDifference": 7.81,
-        "percentage": 14.28
-    },
-    "year": {
-        "priceDifference": -9.76,
-        "percentage": -13.5
+    "priceChanges": {
+        "day": {
+            "priceDifference": 0.47,
+            "percentage": 0.76
+        },
+        "week": {
+            "priceDifference": -2.3,
+            "percentage": -3.55
+        },
+        "month": {
+            "priceDifference": -5.42,
+            "percentage": -7.98
+        },
+        "ytd": {
+            "priceDifference": 7.81,
+            "percentage": 14.28
+        },
+        "year": {
+            "priceDifference": -9.76,
+            "percentage": -13.5
+        }
     }
 }
 ```
@@ -53,26 +55,28 @@ http://localhost:8080/crypto/btc
 {
     "tickerName": "BTC",
     "type": "crypto",
-    "currentPrice": 48466.44,
-    "day": {
-        "priceDifference": -403.06,
-        "percentage": -0.82
-    },
-    "week": {
-        "priceDifference": 1075.9,
-        "percentage": 2.26
-    },
-    "month": {
-        "priceDifference": 18806.77,
-        "percentage": 62.99
-    },
-    "ytd": {
-        "priceDifference": 8617.2,
-        "percentage": 21.52
-    },
-    "year": {
-        "priceDifference": -6946.4,
-        "percentage": -12.49
+    "currentPrice": 49214.91,
+    "priceChanges": {
+        "day": {
+            "priceDifference": 345.41,
+            "percentage": 0.71
+        },
+        "week": {
+            "priceDifference": 3170.6,
+            "percentage": 6.88
+        },
+        "month": {
+            "priceDifference": 16751.35,
+            "percentage": 51.55
+        },
+        "ytd": {
+            "priceDifference": 13930.1,
+            "percentage": 39.45
+        },
+        "year": {
+            "priceDifference": 1241.35,
+            "percentage": 2.59
+        }
     }
 }
 ```
