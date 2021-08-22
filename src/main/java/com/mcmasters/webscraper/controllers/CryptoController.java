@@ -2,6 +2,7 @@ package com.mcmasters.webscraper.controllers;
 
 import com.mcmasters.webscraper.entities.Stock;
 import com.mcmasters.webscraper.exceptions.UnableToScrapeStockException;
+import com.mcmasters.webscraper.services.TickerSupportedChecker;
 import com.mcmasters.webscraper.services.WebScraper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,9 @@ public class CryptoController {
 
     @Autowired
     private WebScraper webScraper;
+
+    @Autowired
+    private TickerSupportedChecker tickerSupportedChecker;
 
 
     @GetMapping("/stock/{ticker}")
@@ -38,17 +42,16 @@ public class CryptoController {
         return ResponseEntity.ok().body(webScraper.scrapeCryptoInfo(coin));
     }
 
-    // Some stocks or index funds such as VTSAX can not be web scraped.
-    // This returns if the given ticker is supported by this program.
+    // If a stock/crypto/index fund can not be web scraped (such as VTSAX) then this API does not support it.
     @GetMapping("/stock/{ticker}/verify")
-    public ResponseEntity<Boolean> verifyStockCanBeFound(@PathVariable String ticker) {
-        boolean result = true;
-        return ResponseEntity.ok().body(result);      // TODO
+    public ResponseEntity<Boolean> verifyStockIsSupported(@PathVariable String ticker) {
+        boolean result = tickerSupportedChecker.checkIfStockIsScrapable(ticker);
+        return ResponseEntity.ok().body(result);
     }
 
     @GetMapping("/crypto/{coin}/verify")
-    public ResponseEntity<Boolean> verifyCryptoCanbeFound(@PathVariable String coin) {
-        boolean result = true;
-        return ResponseEntity.ok().body(result);      // TODO
+    public ResponseEntity<Boolean> verifyCrypIsSupported(@PathVariable String coin) {
+        boolean result = tickerSupportedChecker.checkIfCryptoIsScrapable(coin);
+        return ResponseEntity.ok().body(result);
     }
 }
