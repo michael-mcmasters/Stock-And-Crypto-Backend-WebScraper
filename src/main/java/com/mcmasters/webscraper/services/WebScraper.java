@@ -2,6 +2,7 @@ package com.mcmasters.webscraper.services;
 
 import com.mcmasters.webscraper.entities.PriceChange;
 import com.mcmasters.webscraper.entities.Stock;
+import com.mcmasters.webscraper.exceptions.UnableToScrapeStockException;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -23,24 +24,23 @@ public class WebScraper {
     private BarchartScraperService barchartScraperService;
 
 
-    public Stock scrapeStockInfo(String stockTicker) throws IOException {
+    public Stock scrapeStockInfo(String stockTicker) throws UnableToScrapeStockException {
         try {
             String robinhoodURI = "https://robinhood.com/stocks/" + stockTicker;
             String barchartURI = "https://www.barchart.com/stocks/quotes/" + stockTicker + "/performance";
             return scrape(stockTicker, "stock", robinhoodURI, barchartURI);
         } catch (Exception exc) {
-            System.out.println(exc.getMessage());
-            throw new IOException("Unable to fetch stock " + stockTicker);
+            throw new UnableToScrapeStockException("Unable to webscrape stock " + stockTicker);
         }
     }
 
-    public Stock scrapeCryptoInfo(String coinTicker) throws IOException {
+    public Stock scrapeCryptoInfo(String coinTicker) throws UnableToScrapeStockException {
         try {
             String robinhoodURI = "https://robinhood.com/crypto/" + coinTicker;
             String barchartURI = "https://www.barchart.com/crypto/quotes/%5E" + coinTicker + "USD/performance";
             return scrape(coinTicker, "crypto", robinhoodURI, barchartURI);
         } catch (Exception exc) {
-            throw new IOException("Unable to fetch crypto " + coinTicker);
+            throw new UnableToScrapeStockException("Unable to webscrape crypto " + coinTicker);
         }
     }
 
