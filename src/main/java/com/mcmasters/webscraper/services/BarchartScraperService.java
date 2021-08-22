@@ -17,7 +17,7 @@ public class BarchartScraperService {
 
     private static final String historicPriceQuery = "barchart-table-scroll tr";
 
-    // Returns the difference/percentage change from
+    // Returns the difference/percentage price change compared to the week, month, YTD, and year
     public List<PriceChange> scrapeHistoricPriceChanges(Document barchartDoc) {
         List<PriceChange> priceChanges = new ArrayList<>();
 
