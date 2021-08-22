@@ -1,7 +1,7 @@
 package com.mcmasters.webscraper.services;
 
-import com.mcmasters.webscraper.Entities.HistoricPrice;
-import com.mcmasters.webscraper.Entities.Stock;
+import com.mcmasters.webscraper.entities.HistoricPrice;
+import com.mcmasters.webscraper.entities.Stock;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;

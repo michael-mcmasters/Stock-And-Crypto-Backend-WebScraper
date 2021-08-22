@@ -1,6 +1,6 @@
 package com.mcmasters.webscraper.controllers;
 
-import com.mcmasters.webscraper.Entities.Stock;
+import com.mcmasters.webscraper.entities.Stock;
 import com.mcmasters.webscraper.services.WebScraper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

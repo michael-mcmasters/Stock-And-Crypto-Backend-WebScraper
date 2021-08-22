@@ -1,4 +1,4 @@
-package com.mcmasters.webscraper.Entities;
+package com.mcmasters.webscraper.entities;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
