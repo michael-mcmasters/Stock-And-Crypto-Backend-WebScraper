@@ -69,7 +69,10 @@ public class WebScraper {
     private List<HistoricPrice> getHistoricPrices(Document robinhoodDoc, Document barchartDoc) {
         List<HistoricPrice> historicPrices = new ArrayList<>();
 
-        String percentageStr = robinhoodDoc.selectFirst(robinhoodCurrentDifferenceQuery).text();
+        Element element = robinhoodDoc.selectFirst(robinhoodCurrentDifferenceQuery);
+        log.info("Robinhood element for 1 day percentage = {}", element);
+
+        String percentageStr = element.text();
         String[] arr = percentageStr.split(" ");
         double price = convertPriceToDouble(arr[0]);
         double percentage = convertPercentageToDouble(arr[1]);
@@ -77,6 +80,7 @@ public class WebScraper {
 
         Elements elements = barchartDoc.select(barchartHistoricPriceAndDifferenceQuery);
         for (Element e : elements) {
+            log.info("Barchart element for historic prices and percentages = {}", e);
             arr = e.text().split(" ");
             price = convertPriceToDouble(arr[9]);
             percentage = convertPercentageToDouble(arr[10]);
