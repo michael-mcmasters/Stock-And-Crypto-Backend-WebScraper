@@ -3,7 +3,7 @@ package com.mcmasters.webscraper.controllers;
 import com.mcmasters.webscraper.entities.Ticker;
 import com.mcmasters.webscraper.exceptions.UnableToScrapeTickerException;
 import com.mcmasters.webscraper.services.TickerSupportedChecker;
-import com.mcmasters.webscraper.services.WebScraper;
+import com.mcmasters.webscraper.services.WebScraperService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +20,7 @@ import java.util.Set;
 public class CryptoController {
 
     @Autowired
-    private WebScraper webScraper;
+    private WebScraperService webScraperService;
 
     @Autowired
     private TickerSupportedChecker tickerSupportedChecker;
@@ -30,7 +30,7 @@ public class CryptoController {
     public ResponseEntity<Ticker> getCyrptoPrice(@PathVariable String ticker) throws UnableToScrapeTickerException {
         log.info("Scraping prices for crypto, {}", ticker);
 
-        Ticker cryptoTicker = webScraper.scrapeCryptoInfo(ticker);
+        Ticker cryptoTicker = webScraperService.scrapeCryptoInfo(ticker);
         log.info("Retrieved prices for crypto {}, {}", ticker, cryptoTicker);
         return ResponseEntity.ok().body(cryptoTicker);
     }

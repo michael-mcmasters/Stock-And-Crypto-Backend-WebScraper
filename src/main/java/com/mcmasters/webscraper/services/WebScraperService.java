@@ -15,7 +15,7 @@ import java.util.List;
 
 @Slf4j
 @Service
-public class WebScraper {
+public class WebScraperService {
 
     @Autowired
     private RobinhoodScraperService robinhoodScraperService;

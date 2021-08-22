@@ -18,7 +18,7 @@ import java.util.Set;
 public class TickerSupportedChecker {
 
     @Autowired
-    private WebScraper webScraper;
+    private WebScraperService webScraperService;
 
     // Cache results for a faster response if the same ticker is sent again
     @Getter Set<String> unsupportedStocks = new HashSet<>();
@@ -34,7 +34,7 @@ public class TickerSupportedChecker {
 
         log.info("Checking if stock {} is supported by this API", tickerName);
         try {
-            webScraper.scrapeStockInfo(tickerName);
+            webScraperService.scrapeStockInfo(tickerName);
         } catch (UnableToScrapeTickerException e) {
             log.info("Stock {} is not supported by this API", tickerName);
             unsupportedStocks.add(tickerName);
@@ -51,7 +51,7 @@ public class TickerSupportedChecker {
 
         log.info("Checking if crypto {} is supported by this API", tickerName);
         try {
-            webScraper.scrapeCryptoInfo(tickerName);
+            webScraperService.scrapeCryptoInfo(tickerName);
         } catch (UnableToScrapeTickerException e) {
             log.info("Crypto {} is not supported by this API", tickerName);
             unsupportedCryptos.add(tickerName);
