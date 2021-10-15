@@ -1,7 +1,8 @@
 # Stock-And-Crypto-Backend-WebScraper
+
+[View the front end here.](https://github.com/michael-mcmasters/Stock-And-Crypto-Tracker)
+
 A REST API that returns the current price of the given stock or cryptocurrency by web scraping various websites. Built using Spring.
-<br>
-[You can see the React front end here.](https://github.com/michael-mcmasters/Stock-And-Crypto-Tracker)
 
 ## To Run Locally
 Clone this repo, open the project in your IDE of choice, and in the WebScraperApplication class run the main() method.
